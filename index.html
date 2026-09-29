@@ -44,7 +44,7 @@
                 <h1>Available Courses</h1>
 
                 <button class="btn btn-primary mt-auto checkout-button" v-on:click="flipDisplayCart()"
-                    v-show="enableCheckoutButton">checkout {{numberOfItems}} items</button>
+                    v-show="!enableCheckoutButton">checkout {{numberOfItems}} items</button>
 
             </div>
 
@@ -192,28 +192,26 @@
                     ],
 
                     cart: [],
-                    
-                    <!-- variable to determine if the lessons or checkout be shown-->
+                    // variable to determine if the lessons or checkout be shown
                     displayCart: false
                 }
 
             },
 
             methods: {
-                <!-- method to add a lesson to the cart-->
+                // method to add a lesson to the cart
                 addToCart(course) {
-
                     this.cart.push(course.id);
                     course.availability -= 1;
                     console.log(this.cart)
                 },
 
-                <!--method that checks if a lesson can be added to the cart-->
+                // method that checks if a lesson can be added to the cart
                 canAddToCart(course) {
                     return course.availability > 0;
                 },
 
-                <!-- method that flips displayCart var for showing checkout-->
+                // method that flips displayCart var for showing checkout
                 flipDisplayCart() {
                     this.displayCart = !this.displayCart;
                     console.log(this.displayCart);
@@ -225,7 +223,7 @@
                     return this.cart.length;
                 },
 
-                <!-- var that checks if the chekout button can be available or not -->
+                // var that checks if the chekout button can be available or not
                 enableCheckoutButton: function () {
                     return this.numberOfItems > 0
                 }
