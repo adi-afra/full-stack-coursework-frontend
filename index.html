@@ -22,11 +22,32 @@
     <!-- Vue application -->
     <div id="app">
 
-        <div class="container py-5 card-back">
+        <nav class="navbar navbar-expand-lg course-navbar">
+            <div class="container-fluid">
 
-            <h1 class="text-center mb-5">
-                Available Courses
-            </h1>
+                <a class="navbar-brand" href="#">
+                    My Courses
+                </a>
+
+                <div class="navbar-nav">
+                    <a class="nav-link" href="#">Home</a>
+                    <a class="nav-link" href="#">Courses</a>
+                    <a class="nav-link" href="#">About</a>
+                </div>
+
+            </div>
+        </nav>
+
+        <div v-if="!displayCart" class="container-fluid py-5 card-back">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <h1>Available Courses</h1>
+
+                <button class="btn btn-primary mt-auto checkout-button" v-on:click="flipDisplayCart()"
+                    v-show="enableCheckoutButton">checkout {{numberOfItems}} items</button>
+
+            </div>
+
 
             <!-- Course grid -->
             <div class="row g-4">
@@ -80,6 +101,13 @@
                 </div>
 
             </div>
+
+        </div>
+
+        <div v-else>
+            <h1>
+                checkout
+            </h1>
 
         </div>
 
@@ -163,12 +191,16 @@
 
                     ],
 
-                    cart: []
+                    cart: [],
+                    
+                    <!-- variable to determine if the lessons or checkout be shown-->
+                    displayCart: false
                 }
 
             },
 
             methods: {
+                <!-- method to add a lesson to the cart-->
                 addToCart(course) {
 
                     this.cart.push(course.id);
@@ -176,14 +208,26 @@
                     console.log(this.cart)
                 },
 
+                <!--method that checks if a lesson can be added to the cart-->
                 canAddToCart(course) {
                     return course.availability > 0;
+                },
+
+                <!-- method that flips displayCart var for showing checkout-->
+                flipDisplayCart() {
+                    this.displayCart = !this.displayCart;
+                    console.log(this.displayCart);
                 }
             },
 
             computed: {
-                numberOfItems: function() {
+                numberOfItems: function () {
                     return this.cart.length;
+                },
+
+                <!-- var that checks if the chekout button can be available or not -->
+                enableCheckoutButton: function () {
+                    return this.numberOfItems > 0
                 }
             }
 

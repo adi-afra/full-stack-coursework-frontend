@@ -17,6 +17,11 @@ body {
     transition: 0.2s;
 }
 
+.card-img-top {
+    height: 390px;
+    object-fit: cover;
+}
+
 .badge {
     background-color: #38A3A5 !important;
 }
@@ -39,7 +44,26 @@ body {
     color: #38A3A5;
 }
 
-.card-img-top {
-    height: 390px;
-    object-fit: cover;
+.checkout-button {
+    background-color: #90e0ef;
+    border: none;
+    color: black;
+}
+
+.checkout-button:hover {
+    background-color: #caf0f8;
+    color: black;
+}
+
+.course-navbar {
+    background-color: #22577A;
+}
+
+.course-navbar .navbar-brand,
+.course-navbar .nav-link {
+    color: white;
+}
+
+.course-navbar .nav-link:hover {
+    color: #80ED99;
 }
