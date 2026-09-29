@@ -1,0 +1,45 @@
+body {
+    background-color: #f4f8f7;
+}
+
+.course-title {
+    color: #22577A;
+}
+
+.card {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    transition: 0.2s;
+}
+
+.badge {
+    background-color: #38A3A5 !important;
+}
+
+.price {
+    color: #22577A;
+}
+
+.enrol-button {
+    background-color: #22577A;
+    border: none;
+    color: white;
+}
+
+.enrol-button:hover {
+    background-color: #38A3A5;
+}
+
+.location {
+    color: #38A3A5;
+}
+
+.card-img-top {
+    height: 390px;
+    object-fit: cover;
+}

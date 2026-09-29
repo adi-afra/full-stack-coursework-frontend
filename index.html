@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Courses</title>
+
+    <!-- Vue -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-light">
+
+    <!-- Vue application -->
+    <div id="app">
+
+        <div class="container py-5 card-back">
+
+            <h1 class="text-center mb-5">
+                Available Courses
+            </h1>
+
+            <!-- Course grid -->
+            <div class="row g-4">
+
+                <!-- Create a card for every course -->
+                <div
+                    v-for="course in courses"
+                    :key="course.id"
+                    class="col-md-6 col-lg-4"
+                >
+
+                    <!-- Course card -->
+                    <div class="card h-100 shadow border-0 course-card">
+
+                        <!-- Course image -->
+                        <img
+                            :src="course.image.src"
+                            :alt="course.image.alt"
+                            class="card-img-top"
+                        >
+
+                        <!-- Card information -->
+                        <div class="card-body d-flex flex-column">
+
+                            <!-- Subject -->
+                            <span class="badge align-self-start mb-3">
+                                {{ course.subject }}
+                            </span>
+
+                            <!-- Title -->
+                            <h2 class="card-title h4 course-title">
+                                {{ course.title }}
+                            </h2>
+
+                            <!-- Description -->
+                            <p class="card-text text-muted">
+                                {{ course.description }}
+                            </p>
+
+                            <!-- Location -->
+                            <p class="mb-2">
+                                <strong>Location:</strong>
+                                {{ course.location }}
+                            </p>
+
+                            <!-- Price -->
+                            <p class="fs-4 fw-bold text-success price">
+                                £{{ course.price }}
+                            </p>
+
+                            <!-- Button -->
+                            <button
+                                class="btn btn-primary mt-auto enrol-button"
+                            >
+                                Enrol Now
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script type="module">
+
+        const { createApp } = Vue
+
+        createApp({
+
+            data() {
+
+                return {
+
+                    courses: [
+
+                        {
+                            id: 1,
+                            subject: 'Math',
+                            title: 'Mathematics Course',
+                            description: 'Learn mathematics through clear explanations, examples, and practical exercises.',
+                            location: 'London',
+                            price: 100,
+
+                            image: {
+                                src: 'images/math.jpg',
+                                alt: 'Mathematics course'
+                            }
+                        },
+
+
+                        {
+                            id: 2,
+                            subject: 'Physics',
+                            title: 'Physics Course',
+                            description: 'Learn the fundamentals of physics and understand how the world around us works.',
+                            location: 'London',
+                            price: 120,
+
+                            image: {
+                                src: 'images/physics.jpg',
+                                alt: 'Physics course'
+                            }
+                        },
+
+
+                        {
+                            id: 3,
+                            subject: 'Chemistry',
+                            title: 'Chemistry Course',
+                            description: 'Explore atoms, molecules, reactions, and the fundamentals of chemistry.',
+                            location: 'Manchester',
+                            price: 90,
+
+                            image: {
+                                src: 'images/chemistry.jpg',
+                                alt: 'Chemistry course'
+                            }
+                        },
+
+
+                        {
+                            id: 4,
+                            subject: 'Computer Science',
+                            title: 'Computer Science Course',
+                            description: 'Learn programming, algorithms, data structures, and computer science fundamentals.',
+                            location: 'Birmingham',
+                            price: 150,
+
+                            image: {
+                                src: 'images/computer.jpg',
+                                alt: 'Computer science course'
+                            }
+                        }
+
+                    ]
+
+                }
+
+            }
+
+        }).mount('#app')
+
+    </script>
+
+</body>
+
+</html>
