@@ -148,13 +148,16 @@
                             </p>
 
                             <!-- number in the basket -->
-                            <p class="mb-2"">
+                            <p class="mb-2">
                                 <strong>Amount:</strong>
                                 {{ cart[course.id] }}
+                                <button class="btn btn-outline-secondary" v-on:click="deleteOneFromCart(course)">-</button>
                             </p>
 
                             <!-- Button -->
-                            <button class=" btn btn-primary mt-auto delete-button"> delete </button>
+                            <button class=" btn btn-primary mt-auto delete-button" 
+                            v-on:click="deleteFromCart(course)"> 
+                            delete </button>
 
                         </div>
 
@@ -168,10 +171,10 @@
                 <div class="card mx-auto mt-4 shadow border-0" style="max-width: 500px;">
                     <div class="m-3">
                         <label for="name" class="form-label">Name</label>
-                        <input type="text" id="name" class="form-control" placeholder="Enter your name">
+                        <input type="text" id="name" class="form-control" placeholder="Enter your name" v-model="customer.name">
                         <label for="name" class="form-label">Number</label>
-                        <input type="text" id="name" class="form-control" placeholder="Enter your name">
-                        <button class=" btn btn-primary mt-3"> delete </button>
+                        <input type="text" id="name" class="form-control" placeholder="Enter your name" v-model="customer.number">
+                        <button class=" btn btn-primary mt-3" v-bind:disabled="!enableCheckoutButton"> checkout </button>
                     </div>
                 </div>
             </div>
@@ -261,7 +264,12 @@
 
                     cart: {},
                     // variable to determine if the lessons or checkout be shown
-                    displayCart: false
+                    displayCart: false,
+
+                    customer: {
+                        name: "",
+                        number: ""
+                    }
                 }
 
             },
@@ -280,6 +288,22 @@
                     console.log(this.cart);
                 },
 
+                deleteOneFromCart(course) {
+                    this.cart[course.id]--;
+                    course.availability++;
+                    if(this.cart[course.id] === 0) {
+                        delete this.cart[course.id];
+                    }
+
+                },
+
+                deleteFromCart(course) {
+                    course.availability += this.cart[course.id];
+                    delete this.cart[course.id];
+                    console.log(course.availability);
+
+                },
+
                 // method that checks if a lesson can be added to the cart
                 canAddToCart(course) {
                     return course.availability > 0;
@@ -288,7 +312,6 @@
                 // method that flips displayCart var for showing checkout
                 flipDisplayCart() {
                     this.displayCart = !this.displayCart;
-                    console.log(this.inShoppingCartCourses);
                 }
             },
 
@@ -300,15 +323,14 @@
                     return total;
                 },
 
-                // var that checks if the chekout button can be available or not
+                // var that checks if the chekout button can be available or not at the chekout page
                 enableCheckoutButton: function () {
-                    return this.numberOfItems > 0
+                    return this.customer.name !== "" && this.customer.number !== ""
                 },
 
                 // the filtered course that are in the shopping cart 
                 inShoppingCartCourses: function () {
                     const keys = Object.keys(this.cart);
-                    console.log(keys);
                     return this.courses.filter(course =>
                         keys.includes(String(course.id))
                     );
