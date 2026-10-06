@@ -147,8 +147,14 @@
                                 £{{ course.price }}
                             </p>
 
+                            <!-- number in the basket -->
+                            <p class="mb-2"">
+                                <strong>Amount:</strong>
+                                {{ cart[course.id] }}
+                            </p>
+
                             <!-- Button -->
-                            <button class="btn btn-primary mt-auto delete-button"> delete </button>
+                            <button class=" btn btn-primary mt-auto delete-button"> delete </button>
 
                         </div>
 
@@ -158,11 +164,18 @@
 
             </div>
 
-            <div class="d-flex justify-content-center align-items-center mt-4">
-
-               <button class="btn btn-primary mt-auto delete-button"> checkout </button>
-
+            <div class="container">
+                <div class="card mx-auto mt-4 shadow border-0" style="max-width: 500px;">
+                    <div class="m-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" id="name" class="form-control" placeholder="Enter your name">
+                        <label for="name" class="form-label">Number</label>
+                        <input type="text" id="name" class="form-control" placeholder="Enter your name">
+                        <button class=" btn btn-primary mt-3"> delete </button>
+                    </div>
+                </div>
             </div>
+
 
         </div>
 
@@ -246,7 +259,7 @@
 
                     ],
 
-                    cart: [],
+                    cart: {},
                     // variable to determine if the lessons or checkout be shown
                     displayCart: false
                 }
@@ -254,11 +267,17 @@
             },
 
             methods: {
-                // method to add a lesson to the cart
+                // method to add a lesson to the cart **need change
                 addToCart(course) {
-                    this.cart.push(course.id);
-                    course.availability -= 1;
-                    console.log(this.cart)
+                    if (course.id in this.cart) {
+                        this.cart[course.id]++;
+                    }
+
+                    else {
+                        this.cart[course.id] = 1;
+                    }
+                    course.availability--;
+                    console.log(this.cart);
                 },
 
                 // method that checks if a lesson can be added to the cart
@@ -269,13 +288,16 @@
                 // method that flips displayCart var for showing checkout
                 flipDisplayCart() {
                     this.displayCart = !this.displayCart;
-                    console.log(this.displayCart);
+                    console.log(this.inShoppingCartCourses);
                 }
             },
 
             computed: {
+                //**needs change 
                 numberOfItems: function () {
-                    return this.cart.length;
+                    var total = Object.values(this.cart).reduce((sum, value) => sum + value, 0);
+
+                    return total;
                 },
 
                 // var that checks if the chekout button can be available or not
@@ -285,8 +307,10 @@
 
                 // the filtered course that are in the shopping cart 
                 inShoppingCartCourses: function () {
+                    const keys = Object.keys(this.cart);
+                    console.log(keys);
                     return this.courses.filter(course =>
-                        this.cart.includes(course.id)
+                        keys.includes(String(course.id))
                     );
                 }
             }
