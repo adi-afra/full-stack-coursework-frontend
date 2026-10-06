@@ -33,18 +33,17 @@
                     <a class="nav-link" href="#">Home</a>
                     <a class="nav-link" href="#">Courses</a>
                     <a class="nav-link" href="#">About</a>
+                    <button class="btn btn-primary mt-auto checkout-button" v-on:click="flipDisplayCart()">checkout
+                        {{numberOfItems}} items</button>
                 </div>
 
             </div>
         </nav>
 
-        <div v-if="!displayCart" class="container-fluid py-5 card-back">
+        <div v-if="!displayCart" class="container-fluid py-5">
             <div class="d-flex justify-content-between align-items-center mb-4">
 
                 <h1>Available Courses</h1>
-
-                <button class="btn btn-primary mt-auto checkout-button" v-on:click="flipDisplayCart()"
-                    v-show="enableCheckoutButton">checkout {{numberOfItems}} items</button>
 
             </div>
 
@@ -56,7 +55,7 @@
                 <div v-for="course in courses" :key="course.id" class="col-md-6 col-lg-4">
 
                     <!-- Course card -->
-                    <div class="card h-100 shadow border-0 course-card">
+                    <div class="card h-100 shadow border-0">
 
                         <!-- Course image -->
                         <img :src="course.image.src" :alt="course.image.alt" class="card-img-top">
@@ -85,6 +84,11 @@
                                 {{ course.location }}
                             </p>
 
+                            <p class="mb-2">
+                                <strong>Available Space:</strong>
+                                {{ course.availability }}
+                            </p>
+
                             <!-- Price -->
                             <p class="fs-4 fw-bold text-success price">
                                 £{{ course.price }}
@@ -104,10 +108,61 @@
 
         </div>
 
-        <div v-else>
-            <h1>
-                checkout
-            </h1>
+        <div v-else class="container-fluid py-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <h1>
+                    checkout
+                </h1>
+
+            </div>
+
+            <div class="row g-4">
+                <div v-for="course in inShoppingCartCourses" :key="course.id" class="col-md-6 col-lg-4">
+
+                    <div class="card h-100 shadow border-0">
+
+
+                        <!-- Card information -->
+                        <div class="card-body d-flex flex-column">
+
+                            <!-- Subject -->
+                            <span class="badge align-self-start mb-3">
+                                {{ course.subject }}
+                            </span>
+
+                            <!-- Title -->
+                            <h2 class="card-title h4 course-title">
+                                {{ course.title }}
+                            </h2>
+
+                            <!-- Location -->
+                            <p class="mb-2">
+                                <strong>Location:</strong>
+                                {{ course.location }}
+                            </p>
+
+                            <!-- Price -->
+                            <p class="fs-4 fw-bold text-success price">
+                                £{{ course.price }}
+                            </p>
+
+                            <!-- Button -->
+                            <button class="btn btn-primary mt-auto delete-button"> delete </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="d-flex justify-content-center align-items-center mt-4">
+
+               <button class="btn btn-primary mt-auto delete-button"> checkout </button>
+
+            </div>
 
         </div>
 
@@ -226,6 +281,13 @@
                 // var that checks if the chekout button can be available or not
                 enableCheckoutButton: function () {
                     return this.numberOfItems > 0
+                },
+
+                // the filtered course that are in the shopping cart 
+                inShoppingCartCourses: function () {
+                    return this.courses.filter(course =>
+                        this.cart.includes(course.id)
+                    );
                 }
             }
 

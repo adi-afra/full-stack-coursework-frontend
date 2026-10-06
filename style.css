@@ -30,6 +30,7 @@ body {
     color: #22577A;
 }
 
+/* enrol button*/
 .enrol-button {
     background-color: #22577A;
     border: none;
@@ -37,6 +38,17 @@ body {
 }
 
 .enrol-button:hover {
+    background-color: #38A3A5;
+}
+
+/*course delete button*/
+.delete-button {
+    background-color: #f73e3e;
+    border: none;
+    color: black;
+}
+
+.delete-button:hover {
     background-color: #38A3A5;
 }
 
