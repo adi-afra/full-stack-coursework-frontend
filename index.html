@@ -301,6 +301,8 @@
 
                 // function to check you out and book the courses 
                 checkout() {
+                    //functon to send customer and cart info to the backend 
+                    this.postOrder()
                     this.cart = {}
 
                     this.customer.name = "";
@@ -358,6 +360,20 @@
                     let response = await (fetch(this.BASE_URL + "/courses"));
                     this.courses = await response.json();
                 },
+
+                //function that calls /order POST API to send user and cart infro to the server
+                async postOrder(){ 
+                     
+                    const url = this.BASE_URL  + "/order"; 
+                    const options = { 
+                        method: 'POST', 
+                        headers: { 
+                            'Content-Type': 'application/json' 
+                        }, 
+                        body: JSON.stringify(Object.assign({}, this.customer, this.cart)) 
+                    } 
+                    let response = await (fetch (url, options)); 
+                } 
             },
 
             computed: {
