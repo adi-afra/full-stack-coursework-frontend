@@ -250,7 +250,9 @@
                     sortOption: "none",
 
                     //way of sorting false for descending
-                    sortOrder: false
+                    sortOrder: false,
+
+                    BASE_URL: "http://localhost:3000"
                 }
 
             },
@@ -352,9 +354,8 @@
                 },
 
                 //async func that retrives list of products 
-                async fetchData() {
-                    const url = "http://localhost:3000/";
-                    let response = await (fetch(url));
+                async fetchCourses() {
+                    let response = await (fetch(this.BASE_URL + "/courses"));
                     this.courses = await response.json();
                 },
             },
@@ -392,7 +393,7 @@
             },
 
             created() {
-                this.fetchData();
+                this.fetchCourses();
             },
 
         }).mount('#app')
