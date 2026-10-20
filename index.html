@@ -246,8 +246,10 @@
                         number: ""
                     },
 
+                    // what to sort on
                     sortOption: "none",
 
+                    //way of sorting false for descending
                     sortOrder: false
                 }
 
@@ -267,6 +269,7 @@
                     console.log(this.cart);
                 },
 
+                //delets an item from cart
                 deleteOneFromCart(course) {
                     this.cart[course.id]--;
                     course.availability++;
@@ -276,6 +279,7 @@
 
                 },
 
+                //deletes all item from a cart
                 deleteFromCart(course) {
                     course.availability += this.cart[course.id];
                     delete this.cart[course.id];
@@ -293,6 +297,7 @@
                     this.displayCart = !this.displayCart;
                 },
 
+                // function to check you out and book the courses 
                 checkout() {
                     this.cart = {}
 
@@ -305,7 +310,8 @@
                     }, 2000)
 
                 },
-
+                
+                // function to sort courses based on a value and an order 
                 sortCourses(sort) {
                     console.log(typeof this.sortOrder)
                     // checks if there is any sorting option
@@ -354,7 +360,7 @@
             },
 
             computed: {
-                //**needs change 
+                //holds te number of items in your cart
                 numberOfItems: function () {
                     var total = Object.values(this.cart).reduce((sum, value) => sum + value, 0);
 
@@ -379,6 +385,7 @@
                     );
                 },
 
+                // holds the sorted version of courses by calling the sort method we made 
                 sortedCourses: function () {
                     return this.sortCourses(this.sortOption)
                 }
