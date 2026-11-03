@@ -86,7 +86,7 @@
             <div class="row g-4">
 
                 <!-- Create a card for every course -->
-                <div v-for="course in sortedCourses" :key="course.id" class="col-md-6 col-lg-4">
+                <div v-for="course in sortedCourses" :key="course._id" class="col-md-6 col-lg-4">
 
                     <!-- Course card -->
                     <div class="card h-100 shadow border-0">
@@ -152,7 +152,7 @@
             </div>
 
             <div class="row g-4">
-                <div v-for="course in inShoppingCartCourses" :key="course.id" class="col-md-6 col-lg-4">
+                <div v-for="course in inShoppingCartCourses" :key="course._id" class="col-md-6 col-lg-4">
 
                     <div class="card h-100 shadow border-0">
 
@@ -184,7 +184,7 @@
                             <!-- number in the basket -->
                             <p class="mb-2">
                                 <strong>Amount:</strong>
-                                {{ cart[course.id] }}
+                                {{ cart[course._id] }}
                                 <button class="btn btn-outline-secondary"
                                     v-on:click="deleteOneFromCart(course)">-</button>
                             </p>
@@ -213,7 +213,7 @@
                         <button class=" btn btn-primary mt-3" v-bind:disabled="!enableCheckoutButton"
                             v-on:click="checkout()"> checkout </button>
                         <p v-show="showCheckoutMessage">success</p>
-                        <p v-show="showInvalidFormat">incorrect format in name or number</p>
+                        <p v-show="showInvalidFormat">incorrect formt in name or number</p>
                     </div>
                 </div>
             </div>
@@ -265,12 +265,12 @@
             methods: {
                 // method to add a lesson to the cart **need change
                 addToCart(course) {
-                    if (course.id in this.cart) {
-                        this.cart[course.id]++;
+                    if (course._id in this.cart) {
+                        this.cart[course._id]++;
                     }
 
                     else {
-                        this.cart[course.id] = 1;
+                        this.cart[course._id] = 1;
                     }
                     course.availability--;
                     console.log(this.cart);
@@ -278,18 +278,18 @@
 
                 //delets an item from cart
                 deleteOneFromCart(course) {
-                    this.cart[course.id]--;
+                    this.cart[course._id]--;
                     course.availability++;
-                    if (this.cart[course.id] === 0) {
-                        delete this.cart[course.id];
+                    if (this.cart[course._id] === 0) {
+                        delete this.cart[course._id];
                     }
 
                 },
 
                 //deletes all item from a cart
                 deleteFromCart(course) {
-                    course.availability += this.cart[course.id];
-                    delete this.cart[course.id];
+                    course.availability += this.cart[course._id];
+                    delete this.cart[course._id];
                     console.log(course.availability);
 
                 },
@@ -306,6 +306,9 @@
 
                 // function to check you out and book the courses 
                 checkout() {
+                    //triming the strings to get rid of extra whitespaces 
+                    this.customer.name = this.customer.name.trim();
+                    this.customer.number = this.customer.number.trim();
                     if (/^[a-zA-Z]+$/.test(this.customer.name) && /^(0|\+[1-9])[0-9]{6,14}$/.test(this.customer.number)) {
                         //functon to send customer and cart info to the backend 
                         this.postOrder()
@@ -383,10 +386,27 @@
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify(Object.assign({}, this.customer, this.cart))
+                        body: JSON.stringify(Object.assign({}, this.customer, {cart: this.cart}))
                     }
                     let response = await (fetch(url, options));
-                }
+                },
+
+                //function to update a lesson
+                async updateLesson(lesson){ 
+                    let updateBody = { 
+                        availability: 30 
+                    }; 
+ 
+                    const url = this.BASE_URL + "/courses/" + lesson._id; 
+                    const options = { 
+                        method: 'PUT', 
+                        headers: { 
+                            'Content-Type': 'application/json' 
+                        }, 
+                        body: JSON.stringify(updateBody) 
+                    } 
+                    let response = await (fetch (url, options)); 
+                }, 
             },
 
             computed: {
@@ -411,7 +431,7 @@
                 inShoppingCartCourses: function () {
                     const keys = Object.keys(this.cart);
                     return this.courses.filter(course =>
-                        keys.includes(String(course.id))
+                        keys.includes(String(course._id))
                     );
                 },
 
