@@ -61,8 +61,8 @@
 
                     <div class="d-flex gap-3">
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" id="ascending" v-bind:value="true" v-model="sortOrder"
-                                name="sortOrder" v-bind:disabled="enableFilterSortType" />
+                            <input class="form-check-input" type="radio" id="ascending" v-bind:value="true"
+                                v-model="sortOrder" name="sortOrder" v-bind:disabled="enableFilterSortType" />
                             <label class="form-check-label" for="ascending">
                                 Ascending
                             </label>
@@ -208,11 +208,12 @@
                         <input type="text" id="name" class="form-control" placeholder="Enter your name"
                             v-model="customer.name">
                         <label for="name" class="form-label">Number</label>
-                        <input type="text" id="name" class="form-control" placeholder="Enter your name"
+                        <input type="tel" id="name" class="form-control" placeholder="Enter your number"
                             v-model="customer.number">
                         <button class=" btn btn-primary mt-3" v-bind:disabled="!enableCheckoutButton"
                             v-on:click="checkout()"> checkout </button>
                         <p v-show="showCheckoutMessage">success</p>
+                        <p v-show="showInvalidFormat">incorrect format in name or number</p>
                     </div>
                 </div>
             </div>
@@ -239,7 +240,11 @@
                     // variable to determine if the lessons or checkout be shown
                     displayCart: false,
 
+                    //to show the success message of a chekout
                     showCheckoutMessage: false,
+
+                    //to show invalid format
+                    showInvalidFormat: false,
 
                     customer: {
                         name: "",
@@ -301,20 +306,28 @@
 
                 // function to check you out and book the courses 
                 checkout() {
-                    //functon to send customer and cart info to the backend 
-                    this.postOrder()
-                    this.cart = {}
+                    if (/^[a-zA-Z]+$/.test(this.customer.name) && /^(0|\+[1-9])[0-9]{6,14}$/.test(this.customer.number)) {
+                        //functon to send customer and cart info to the backend 
+                        this.postOrder()
+                        this.cart = {}
 
-                    this.customer.name = "";
-                    this.customer.number = "";
+                        this.customer.name = "";
+                        this.customer.number = "";
 
-                    this.showCheckoutMessage = true;
-                    setTimeout(() => {
-                        this.showCheckoutMessage = false
-                    }, 2000)
+                        this.showCheckoutMessage = true;
+                        setTimeout(() => {
+                            this.showCheckoutMessage = false
+                        }, 2000)
+                    }
+                    else {
+                        this.showInvalidFormat = true;
+                        setTimeout(() => {
+                            this.showInvalidFormat = false
+                        }, 2000)
+                    }
 
                 },
-                
+
                 // function to sort courses based on a value and an order 
                 sortCourses(sort) {
                     console.log(typeof this.sortOrder)
@@ -362,18 +375,18 @@
                 },
 
                 //function that calls /order POST API to send user and cart infro to the server
-                async postOrder(){ 
-                     
-                    const url = this.BASE_URL  + "/order"; 
-                    const options = { 
-                        method: 'POST', 
-                        headers: { 
-                            'Content-Type': 'application/json' 
-                        }, 
-                        body: JSON.stringify(Object.assign({}, this.customer, this.cart)) 
-                    } 
-                    let response = await (fetch (url, options)); 
-                } 
+                async postOrder() {
+
+                    const url = this.BASE_URL + "/order";
+                    const options = {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(Object.assign({}, this.customer, this.cart))
+                    }
+                    let response = await (fetch(url, options));
+                }
             },
 
             computed: {
@@ -386,7 +399,7 @@
 
                 // var that checks if the chekout button can be available or not at the chekout page
                 enableCheckoutButton: function () {
-                    return this.customer.name !== "" && this.customer.number !== ""
+                    return this.customer.name !== "" && this.customer.number !== "" && Object.keys(this.cart).length !== 0
                 },
 
                 //a bolean to decide if the filterType radio button should be disabled or not 
