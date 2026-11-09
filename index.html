@@ -312,6 +312,11 @@
                     if (/^[a-zA-Z]+$/.test(this.customer.name) && /^(0|\+[1-9])[0-9]{6,14}$/.test(this.customer.number)) {
                         //functon to send customer and cart info to the backend 
                         this.postOrder()
+
+                        for (let key in this.cart) {
+                            this.updateLesson(key, this.cart[key])
+                        }
+
                         this.cart = {}
 
                         this.customer.name = "";
@@ -392,12 +397,12 @@
                 },
 
                 //function to update a lesson
-                async updateLesson(lesson){ 
+                async updateLesson(lesson_id, amount_to_change){ 
                     let updateBody = { 
-                        availability: 30 
+                        availability: -amount_to_change
                     }; 
  
-                    const url = this.BASE_URL + "/courses/" + lesson._id; 
+                    const url = this.BASE_URL + "/courses/" + lesson_id; 
                     const options = { 
                         method: 'PUT', 
                         headers: { 
