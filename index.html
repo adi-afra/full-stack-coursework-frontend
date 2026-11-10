@@ -378,6 +378,7 @@
                 async fetchCourses() {
                     let response = await (fetch(this.BASE_URL + "/courses"));
                     this.courses = await response.json();
+                    console.log(this.courses);
                 },
 
                 //function that calls /order POST API to send user and cart infro to the server
@@ -395,10 +396,12 @@
                 },
 
                 //function to update a lesson
-                async updateLesson(lesson_id, amount_to_change){ 
+                async updateLesson(lesson_id, amount_to_change){
+                    let availablity_new = this.courses.find(lesson => lesson._id === lesson_id).availability; 
+                    
                     let updateBody = { 
-                        availability: -amount_to_change,
-                        enrolled: +amount_to_change
+                        availability: availablity_new ,
+                        enrolled:  amount_to_change
                     }; 
  
                     const url = this.BASE_URL + "/courses/" + lesson_id; 
