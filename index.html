@@ -31,7 +31,7 @@
 
                 <div class="navbar-nav">
 
-                    <button class="btn btn-primary mt-auto checkout-button" v-on:click="flipDisplayCart()">checkout
+                    <button class="btn btn-primary mt-auto checkout-button" v-on:click="flipDisplayCart()" v-bind:disabled="!enableGoingToCheckoutPage">checkout
                         {{numberOfItems}} items</button>
                 </div>
 
@@ -210,8 +210,8 @@
                             v-model="customer.number">
                         <button class=" btn btn-primary mt-3" v-bind:disabled="!enableCheckoutButton"
                             v-on:click="checkout()"> checkout </button>
-                        <p v-show="showCheckoutMessage">success</p>
-                        <p v-show="showInvalidFormat">incorrect formt in name or number</p>
+                        <p class= "alert alert-success mt-2" v-show="showCheckoutMessage">success</p>
+                        <p class= "alert alert-danger mt-2" v-show="showInvalidFormat">incorrect formt in name or number</p>
                     </div>
                 </div>
             </div>
@@ -422,6 +422,11 @@
                     var total = Object.values(this.cart).reduce((sum, value) => sum + value, 0);
 
                     return total;
+                },
+
+                //var to make the button that leads to checkout page and back becomes avilable at the right time 
+                enableGoingToCheckoutPage: function() {
+                    return this.displayCart || this.numberOfItems > 0
                 },
 
                 // var that checks if the chekout button can be available or not at the chekout page
